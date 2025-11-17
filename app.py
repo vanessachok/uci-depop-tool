@@ -3,13 +3,14 @@ import pandas as pd
 import plotly.express as px
 from datetime import datetime, timedelta
 import os
+from pathlib import Path
 
 st.set_page_config(page_title="UCI Depop Booth Optimizer", layout="centered")
 st.title("🧵 UCI Depop Booth Optimizer")
 
 @st.cache_data
 def load_kpi():
-    return pd.read_csv("data/kpi_weekly.csv")
+    return pd.read_csv(Path(__file__).parent / "data" / "kpi_weekly.csv")
 
 kpi = load_kpi()
 uci_row = kpi[kpi['School'] == 'UCIrvine'].iloc[0]
@@ -33,7 +34,7 @@ with st.form("event_form"):
     expected = st.slider("Expected attendance", 0, 2000, 200)
     submitted = st.form_submit_button("Save event")
 
-EVENT_FILE = "data/events_manual.csv"
+EVENT_FILE = Path(__file__).parent / "data" / "events_manual.csv"
 if submitted:
     new = pd.DataFrame([{
         "name": name, "date": date.strftime("%Y-%m-%d"),
